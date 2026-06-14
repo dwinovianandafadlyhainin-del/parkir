@@ -1,25 +1,14 @@
-version: "3.8"
-
-services:
-
-  app_parkir_hainin:
-    build: .
-    container_name: app_parkir_hainin
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    environment:
-      - DB_HOST=db_parkir_hainin
-      - DB_DATABASE=parkir_hainin
-      - DB_USERNAME=root
-      - DB_PASSWORD=
-    depends_on:
       - db_parkir_hainin
     networks:
       - net_parkir_hainin
 
   db_parkir_hainin:
     image: mysql:8.0
+    healthcheck:
+    test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
     container_name: db_parkir_hainin
     restart: unless-stopped
     ports:
